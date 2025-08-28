@@ -667,7 +667,7 @@ def my_dashboard():
                     ),
                     angularaxis=dict(tickfont=dict(size=13))
                 ),
-                height=560,
+                height=350,
                 margin=dict(l=30, r=30, t=20, b=20),
                 showlegend=False
             )
@@ -964,10 +964,6 @@ def user_dashboard():
     else:
         logout()
 
-
-# ========== Streamlit UI ==========
-st.title("💬 심리 상담 챗봇")
-
 # 페이지 상태 초기화
 if "page" not in st.session_state:
     st.session_state["page"] = "login"
@@ -976,6 +972,7 @@ if "page" not in st.session_state:
 # 🟢 로그인 페이지 (이미지 + 폼 나란히)
 # =========================
 if st.session_state["page"] == "login" and not st.session_state.get("user_id"):
+    st.title("💬 심리 상담 챗봇")
     col_img, col_form = st.columns([1, 2], vertical_alignment="center")
 
     with col_img:
@@ -1367,10 +1364,12 @@ def admin_dashboard():
 
 # 🟢 유저 대시보드
 if st.session_state.get("role") == "user":
+    st.title(f"🙋 환영합니다, {st.session_state['username']}님")  
     user_dashboard()
 elif st.session_state.get("role") == "admin":
     admin_dashboard()
 elif st.session_state.get("role") == "guest":
+    st.title("👤 비회원 체험 모드")
     unuser_dashboard()
 elif st.session_state["page"] == "register":
     # 위쪽에서 회원가입 폼 렌더
