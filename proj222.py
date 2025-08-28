@@ -884,6 +884,19 @@ def hospital():
     with col3:
         st.text("평점기반")
         
+def chat_header():
+    col1, col2 = st.columns([1, 8])  # 왼쪽: 이미지 / 오른쪽: 타이틀+설명
+
+    with col1:
+        st.image("D:/whynot/githome/data/churros.png", width=120)  # 심린이 캐릭터
+
+    with col2:
+        st.markdown("""
+        ### 츄러스미~! 나와 대화해볼래? 👋  
+        심린이한테 고민을 털어놔보세요. 🧡
+        """)
+        st.caption("안녕하세요! 필요한 도움이 있으신가요? 당신의 이야기를 들려주세요. 😊")
+
 def user_dashboard():
     # 사이드바 메뉴
     with st.sidebar:
@@ -900,10 +913,12 @@ def user_dashboard():
         )
 
     if selected == '나의 대시보드':
+        st.title(f"🙋 환영합니다, {st.session_state['username']}님") 
         my_dashboard()
 
      # === 대화 불러오기 ===
-    elif selected == '심린이랑 대화하기':       
+    elif selected == '심린이랑 대화하기':   
+        chat_header()    
         chats = load_chats(st.session_state["user_id"])
         for chat in chats:
             render_bubble("user", chat["question"], USER_AVATAR_PATH)
@@ -959,6 +974,7 @@ def user_dashboard():
         hospital()
 
     elif selected == '심린이 추천 콘텐츠':
+        st.title("🎭 감정 기반 추천 콘텐츠")
         content()
 
     else:
@@ -1363,8 +1379,7 @@ def admin_dashboard():
         logout()
 
 # 🟢 유저 대시보드
-if st.session_state.get("role") == "user":
-    st.title(f"🙋 환영합니다, {st.session_state['username']}님")  
+if st.session_state.get("role") == "user": 
     user_dashboard()
 elif st.session_state.get("role") == "admin":
     admin_dashboard()
