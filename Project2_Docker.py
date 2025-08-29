@@ -24,11 +24,11 @@ def load_avatar(path):
     img.save(buf, format="PNG")
     return buf.getvalue()
 
-GPT_AVATAR_PATH = load_avatar("D:/whynot/githome/data/churros.png")
-USER_AVATAR_PATH = load_avatar("D:/whynot/githome/data/profile.jpg")
+GPT_AVATAR_PATH = load_avatar("data/churros.png")
+USER_AVATAR_PATH = load_avatar("data/profile.jpg")
 
 from pathlib import Path
-CHAR_IMG_PATH = Path("D:/whynot/githome/data/image.png")  # 캐릭터 이미지
+CHAR_IMG_PATH = Path("data/image.png")  # 캐릭터 이미지
 
 
 st.markdown("""
@@ -111,7 +111,8 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 # ========== DB 연결 ==========
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
+        host="db",         # docker-compose 서비스 이름
+        port=3306,         # compose 안에서 MySQL 기본 포트
         user="root",
         password="1234",
         database="Churo2_db"
@@ -491,7 +492,7 @@ def my_dashboard():
         max_depression = None
 
     # -------------------------------------------
-    # ② "오늘 사용시간" 추정 (UserChat의 first/last time 기준)
+    # ② "오늘 사용시간" 추정 (userchat first/last time 기준)
     # -------------------------------------------
     cursor.execute("""
         SELECT MIN(chat_time) AS first_time, MAX(chat_time) AS last_time
@@ -708,7 +709,7 @@ def my_dashboard():
         st.markdown("**📌 북마크 목록**")
         cursor.execute("""
             SELECT b.bookmark_id, m.title AS movie, d.title AS drama, mu.title AS music
-            FROM UserBookmark b
+            FROM userbookmark b
             LEFT JOIN movie m ON b.movie_id = m.movie_id
             LEFT JOIN drama d ON b.drama_id = d.drama_id
             LEFT JOIN music mu ON b.music_id = mu.music_id
@@ -888,7 +889,7 @@ def chat_header():
     col1, col2 = st.columns([1, 8])  # 왼쪽: 이미지 / 오른쪽: 타이틀+설명
 
     with col1:
-        st.image("D:/whynot/githome/data/churros.png", width=120)  # 심린이 캐릭터
+        st.image("data/churros.png", width=120)  # 심린이 캐릭터
 
     with col2:
         st.markdown("""
@@ -1075,7 +1076,7 @@ def u_my_dashboard():
         st.markdown(" **⭐심리 챗봇과 연계된 맞춤 행동 추천**")
         st.markdown(" **⭐심리 맟춤 미디어 추천까지!!!**")
         with col4:
-            img = Image.open("D:/whynot/githome/data/churro2.png")
+            img = Image.open("data/churros.png")
             st.image(img, width=450) # 츄러스미 이미지 삽입
 
     with col1:
@@ -1163,7 +1164,7 @@ def u_my_dashboard():
         
 # 비회원대시보드
 def unuser_dashboard():
-    st.session_state["user_id"] = 2
+    st.session_state["user_id"] = 13
     # 사이드바 메뉴
     with st.sidebar:
         selected = option_menu(
